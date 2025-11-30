@@ -32,7 +32,7 @@ struct DifficultySelectionView: View {
                 Spacer()
             }
             .sheet(item: $selectedDifficulty) { difficulty in
-                ProblemView(viewModel: GameViewModel(difficulty: difficulty))
+                ProblemView<GameViewModel>(viewModel: GameViewModel(difficulty: difficulty))
             }
         }
     }
@@ -44,5 +44,9 @@ struct DifficultySelectionView: View {
         case .hard: return .red
         }
     }
+}
+
+#Preview {
+    DifficultySelectionView()
 }
 

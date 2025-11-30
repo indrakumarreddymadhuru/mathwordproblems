@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct ProblemView: View {
-    @ObservedObject var viewModel: GameViewModel
+struct ProblemView<ViewModel: GameViewModelProtocol>: View {
+    @ObservedObject var viewModel: ViewModel
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
@@ -84,6 +84,105 @@ struct ProblemView: View {
             .navigationBarTitle(viewModel.difficulty.displayName, displayMode: .inline)
             .navigationBarItems(leading: Button("Close") { dismiss() })
         }
+    }
+}
+
+// Protocol for game view model to support previews
+protocol GameViewModelProtocol: ObservableObject {
+    var difficulty: Difficulty { get }
+    var currentProblem: Problem? { get }
+    var correctCount: Int { get set }
+    var totalAttempts: Int { get set }
+    var showFeedback: Bool { get set }
+    var isCorrectAnswer: Bool { get set }
+    var explanationText: String { get set }
+    var sessionFinished: Bool { get set }
+    func selectAnswer(at index: Int)
+    func goToNextProblem()
+    func startNewSession()
+}
+
+// Make GameViewModel conform to the protocol
+extension GameViewModel: GameViewModelProtocol {}
+
+// MARK: - Previews
+
+#Preview("Problem View - Active") {
+    let sampleProblem = Problem(
+        problem: "Sarah has 15 apples. She gives away 7 apples to her friends. How many apples does Sarah have left?",
+        answers: [6, 7, 8, 9],
+        correct: 2, // index of 8
+        explanation: "Sarah started with 15 apples and gave away 7. So we calculate: 15 - 7 = 8 apples remaining.",
+        emoji: "🍎"
+    )
+    
+    let previewViewModel = PreviewGameViewModel(difficulty: .easy, problem: sampleProblem)
+    return ProblemView(viewModel: previewViewModel)
+}
+
+#Preview("Problem View - With Feedback") {
+    let sampleProblem = Problem(
+        problem: "Tom has 20 stickers. He buys 5 more. How many stickers does Tom have now?",
+        answers: [23, 24, 25, 26],
+        correct: 2, // index of 25
+        explanation: "Tom started with 20 stickers and bought 5 more. So we calculate: 20 + 5 = 25 stickers total.",
+        emoji: "⭐️"
+    )
+    
+    let previewViewModel = PreviewGameViewModel(difficulty: .medium, problem: sampleProblem)
+    previewViewModel.showFeedback = true
+    previewViewModel.isCorrectAnswer = true
+    previewViewModel.explanationText = sampleProblem.explanation
+    previewViewModel.totalAttempts = 1
+    previewViewModel.correctCount = 1
+    
+    return ProblemView(viewModel: previewViewModel)
+}
+
+#Preview("Problem View - Finished") {
+    let previewViewModel = PreviewGameViewModel(difficulty: .hard, problem: nil)
+    previewViewModel.sessionFinished = true
+    previewViewModel.correctCount = 8
+    previewViewModel.totalAttempts = 10
+    
+    return ProblemView(viewModel: previewViewModel)
+}
+
+// Preview helper class for SwiftUI previews
+class PreviewGameViewModel: ObservableObject, GameViewModelProtocol {
+    @Published var difficulty: Difficulty
+    @Published var allProblems: [Problem] = []
+    @Published var sessionProblems: [Problem] = []
+    @Published var currentIndex: Int = 0
+    @Published var currentProblem: Problem?
+    @Published var correctCount: Int = 0
+    @Published var totalAttempts: Int = 0
+    @Published var showFeedback: Bool = false
+    @Published var isCorrectAnswer: Bool = false
+    @Published var explanationText: String = ""
+    @Published var sessionFinished: Bool = false
+    
+    let sessionSize: Int = 10
+    
+    init(difficulty: Difficulty, problem: Problem?) {
+        self.difficulty = difficulty
+        if let problem = problem {
+            self.allProblems = [problem]
+            self.sessionProblems = [problem]
+            self.currentProblem = problem
+        }
+    }
+    
+    func startNewSession() {
+        // Preview implementation - no-op
+    }
+    
+    func selectAnswer(at index: Int) {
+        // Preview implementation - no-op
+    }
+    
+    func goToNextProblem() {
+        // Preview implementation - no-op
     }
 }
 
