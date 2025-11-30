@@ -1,0 +1,163 @@
+[
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440001",
+    "problem": "A school cafeteria needs to serve lunch to 156 students. If each table seats 13 students, how many tables are needed?",
+    "answers": [11, 12, 13, 14],
+    "correct": 1,
+    "explanation": "Divide 156 students by 13 per table: 156 ÷ 13 = 12 tables needed.",
+    "emoji": "🍽️"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440002",
+    "problem": "Emma is reading a book with 285 pages. She reads 15 pages per day. How many days will it take her to finish the book?",
+    "answers": [17, 18, 19, 20],
+    "correct": 2,
+    "explanation": "Divide 285 pages by 15 per day: 285 ÷ 15 = 19 days.",
+    "emoji": "📚"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440003",
+    "problem": "A factory produces 135 widgets per hour. How many widgets will it produce in 8 hours?",
+    "answers": [1070, 1080, 1090, 1100],
+    "correct": 1,
+    "explanation": "Multiply 135 widgets per hour by 8 hours: 135 × 8 = 1080 widgets.",
+    "emoji": "⚙️"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440004",
+    "problem": "Tom saves $12 each week for 15 weeks. He then spends $95 on a new bike. How much money does he have left?",
+    "answers": [80, 85, 90, 95],
+    "correct": 1,
+    "explanation": "First calculate savings: $12 × 15 = $180. Then subtract purchase: $180 - $95 = $85 remaining.",
+    "emoji": "🚲"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440005",
+    "problem": "A store receives a shipment of 240 cans. They sell 65 cans on Monday, 78 cans on Tuesday, and 54 cans on Wednesday. How many cans are left?",
+    "answers": [41, 42, 43, 44],
+    "correct": 2,
+    "explanation": "Subtract all sales: 240 - 65 - 78 - 54 = 43 cans remaining.",
+    "emoji": "🥫"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440006",
+    "problem": "Sarah runs 4 miles every day for 21 days. How many miles does she run in total?",
+    "answers": [82, 84, 86, 88],
+    "correct": 1,
+    "explanation": "Multiply 4 miles per day by 21 days: 4 × 21 = 84 miles total.",
+    "emoji": "🏃"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440007",
+    "problem": "A library has 432 books on 9 shelves. If the books are distributed equally, how many books are on each shelf?",
+    "answers": [46, 47, 48, 49],
+    "correct": 2,
+    "explanation": "Divide 432 books by 9 shelves: 432 ÷ 9 = 48 books per shelf.",
+    "emoji": "📖"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440008",
+    "problem": "A train travels 315 miles in 5 hours. How many miles does it travel per hour?",
+    "answers": [61, 62, 63, 64],
+    "correct": 2,
+    "explanation": "Divide 315 miles by 5 hours: 315 ÷ 5 = 63 miles per hour.",
+    "emoji": "🚄"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440009",
+    "problem": "Lucas has $125. He buys a video game for $47 and a book for $36. How much money does he have left?",
+    "answers": [40, 41, 42, 43],
+    "correct": 2,
+    "explanation": "Subtract both purchases: $125 - $47 - $36 = $42 remaining.",
+    "emoji": "💵"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440010",
+    "problem": "A bakery makes 18 batches of cookies per day. Each batch has 24 cookies. How many cookies are made in 7 days?",
+    "answers": [3014, 3024, 3034, 3044],
+    "correct": 1,
+    "explanation": "First calculate per day: 18 × 24 = 432 cookies. Then multiply by 7 days: 432 × 7 = 3024 cookies.",
+    "emoji": "🍪"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440011",
+    "problem": "Anna collects 168 stamps. She wants to organize them into albums, with 14 stamps per album. How many albums does she need?",
+    "answers": [11, 12, 13, 14],
+    "correct": 1,
+    "explanation": "Divide 168 stamps by 14 per album: 168 ÷ 14 = 12 albums needed.",
+    "emoji": "📮"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440012",
+    "problem": "A school has 324 students. They need to be divided into teams of 18 for a competition. How many teams can be formed?",
+    "answers": [17, 18, 19, 20],
+    "correct": 1,
+    "explanation": "Divide 324 students by 18 per team: 324 ÷ 18 = 18 teams.",
+    "emoji": "👥"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440013",
+    "problem": "David bought 15 packs of trading cards. Each pack contains 8 cards. He already had 45 cards. How many cards does he have now?",
+    "answers": [163, 164, 165, 166],
+    "correct": 2,
+    "explanation": "First calculate new cards: 15 × 8 = 120 cards. Then add existing: 120 + 45 = 165 cards total.",
+    "emoji": "🃏"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440014",
+    "problem": "A factory produces 256 units per day. How many units will it produce in 12 days?",
+    "answers": [3052, 3062, 3072, 3082],
+    "correct": 2,
+    "explanation": "Multiply 256 units per day by 12 days: 256 × 12 = 3072 units.",
+    "emoji": "🏭"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440015",
+    "problem": "Sophia read 144 pages in 6 days. If she read the same number of pages each day, how many pages did she read per day?",
+    "answers": [22, 23, 24, 25],
+    "correct": 2,
+    "explanation": "Divide 144 pages by 6 days: 144 ÷ 6 = 24 pages per day.",
+    "emoji": "📚"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440016",
+    "problem": "James has $187. He spends $89 on clothes and $56 on shoes. How much money does he have left?",
+    "answers": [40, 41, 42, 43],
+    "correct": 2,
+    "explanation": "Subtract both purchases: $187 - $89 - $56 = $42 remaining.",
+    "emoji": "👕"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440017",
+    "problem": "A warehouse stores 432 boxes. The boxes are organized into stacks of 24 boxes each. How many stacks are there?",
+    "answers": [17, 18, 19, 20],
+    "correct": 1,
+    "explanation": "Divide 432 boxes by 24 per stack: 432 ÷ 24 = 18 stacks.",
+    "emoji": "📦"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440018",
+    "problem": "Olivia walks 5 miles every day for 28 days. How many miles does she walk in total?",
+    "answers": [138, 140, 142, 144],
+    "correct": 1,
+    "explanation": "Multiply 5 miles per day by 28 days: 5 × 28 = 140 miles total.",
+    "emoji": "🚶"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440019",
+    "problem": "A store had 567 items in stock. They sold 234 items on Monday and 198 items on Tuesday. How many items are left?",
+    "answers": [133, 134, 135, 136],
+    "correct": 2,
+    "explanation": "Subtract both sales: 567 - 234 - 198 = 135 items remaining.",
+    "emoji": "🏪"
+  },
+  {
+    "id": "770e8400-e29b-41d4-a716-446655440020",
+    "problem": "Michael saves $18 per week for 25 weeks. He then spends $325 on a computer. How much money does he have left?",
+    "answers": [120, 125, 130, 135],
+    "correct": 1,
+    "explanation": "First calculate savings: $18 × 25 = $450. Then subtract purchase: $450 - $325 = $125 remaining.",
+    "emoji": "💻"
+  }
+]
+

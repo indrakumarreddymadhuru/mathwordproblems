@@ -1,0 +1,42 @@
+name: MathWordProblems
+options:
+  bundleIdPrefix: com.yourcompany
+  deploymentTarget:
+    iOS: "15.0"
+  developmentLanguage: en
+
+targets:
+  MathWordProblems:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - path: MathWordProblems
+        excludes:
+          - "**/*.plist"
+    resources:
+      - path: MathWordProblems/Resources
+        type: folder
+    info:
+      path: MathWordProblems/Info.plist
+      properties:
+        CFBundleDisplayName: Math Word Problems
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UIRequiredDeviceCapabilities:
+          - armv7
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.yourcompany.MathWordProblems
+      SWIFT_VERSION: "5.0"
+      IPHONEOS_DEPLOYMENT_TARGET: "15.0"
+      TARGETED_DEVICE_FAMILY: "1,2" # iPhone and iPad
+
