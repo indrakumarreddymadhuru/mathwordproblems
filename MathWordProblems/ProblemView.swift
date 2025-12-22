@@ -5,7 +5,6 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        NavigationView {
             VStack(spacing: 16) {
                 if viewModel.sessionFinished {
                     VStack(spacing: 8) {
@@ -64,9 +63,39 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                             .font(.subheadline)
                             .padding(.horizontal)
 
+                    HStack(spacing: 16) {
+                        if viewModel.hasPreviousProblem {
+                            Button("Previous") {
+                                viewModel.goToPreviousProblem()
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.gray.opacity(0.2))
+                            .foregroundColor(.primary)
+                            .cornerRadius(12)
+                        }
+                        
+                        if viewModel.hasNextProblem {
                         Button("Next") {
                             viewModel.goToNextProblem()
                         }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                        } else {
+                            Button("Finish") {
+                                viewModel.goToNextProblem()
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(12)
+                        }
+                    }
+                    .padding(.horizontal)
                         .padding(.top, 8)
                     }
 
@@ -77,12 +106,23 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                     Spacer()
                 } else {
                     Text("No problems available.")
-                    Button("Close") { dismiss() }
+                Button("Back") { dismiss() }
                 }
+        }
+        .padding()
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(viewModel.difficulty.displayName)
+                    .font(.headline)
+                    .foregroundColor(.primary)
             }
-            .padding()
-            .navigationBarTitle(viewModel.difficulty.displayName, displayMode: .inline)
-            .navigationBarItems(leading: Button("Close") { dismiss() })
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Text("\(viewModel.correctCount) / \(viewModel.totalAttempts)")
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+            }
         }
     }
 }
@@ -97,8 +137,11 @@ protocol GameViewModelProtocol: ObservableObject {
     var isCorrectAnswer: Bool { get set }
     var explanationText: String { get set }
     var sessionFinished: Bool { get set }
+    var hasPreviousProblem: Bool { get }
+    var hasNextProblem: Bool { get }
     func selectAnswer(at index: Int)
     func goToNextProblem()
+    func goToPreviousProblem()
     func startNewSession()
 }
 
@@ -164,6 +207,14 @@ class PreviewGameViewModel: ObservableObject, GameViewModelProtocol {
     
     let sessionSize: Int = 10
     
+    var hasPreviousProblem: Bool {
+        return currentIndex > 0
+    }
+    
+    var hasNextProblem: Bool {
+        return currentIndex + 1 < sessionProblems.count
+    }
+    
     init(difficulty: Difficulty, problem: Problem?) {
         self.difficulty = difficulty
         if let problem = problem {
@@ -182,6 +233,10 @@ class PreviewGameViewModel: ObservableObject, GameViewModelProtocol {
     }
     
     func goToNextProblem() {
+        // Preview implementation - no-op
+    }
+    
+    func goToPreviousProblem() {
         // Preview implementation - no-op
     }
 }

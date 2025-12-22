@@ -54,6 +54,9 @@ final class GameViewModel: ObservableObject {
         if isCorrectAnswer {
             correctCount += 1
         }
+        
+        // Record progress
+        ProgressTracker.shared.recordAttempt(difficulty: difficulty, isCorrect: isCorrectAnswer)
     }
 
     func goToNextProblem() {
@@ -67,6 +70,24 @@ final class GameViewModel: ObservableObject {
             currentProblem = nil
             sessionFinished = true
         }
+    }
+    
+    func goToPreviousProblem() {
+        guard !sessionProblems.isEmpty else { return }
+        
+        if currentIndex > 0 {
+            currentIndex -= 1
+            currentProblem = sessionProblems[currentIndex]
+            showFeedback = false
+        }
+    }
+    
+    var hasPreviousProblem: Bool {
+        return currentIndex > 0
+    }
+    
+    var hasNextProblem: Bool {
+        return currentIndex + 1 < sessionProblems.count
     }
 }
 
