@@ -6,7 +6,7 @@ echo "🔍 Verifying Math Word Problems Project Setup..."
 echo ""
 
 PROJECT_DIR="MathWordProblems"
-SOURCE_DIR="$PROJECT_DIR/MathWordProblems"
+SOURCE_DIR="$PROJECT_DIR"
 RESOURCES_DIR="$SOURCE_DIR/Resources"
 
 # Check if source directory exists
