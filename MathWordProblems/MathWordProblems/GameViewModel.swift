@@ -46,26 +46,29 @@ final class GameViewModel: ObservableObject {
     }
 
     func selectAnswer(at index: Int) {
-        guard let problem = currentProblem else { return }
+        guard let problem = currentProblem, !showFeedback else { return }
 
         selectedAnswerIndex = index
         totalAttempts += 1
         let correctIndex = problem.correct
         isCorrectAnswer = (index == correctIndex)
-        showFeedback = true
         
         // Always show explanation, especially for wrong answers
         if isCorrectAnswer {
-            explanationText = "✅ Correct! \(problem.explanation)"
+            explanationText = "✅ Correct!\n\n\(problem.explanation)"
             correctCount += 1
         } else {
             // Show correct answer and explanation when wrong
             let correctAnswer = problem.answers[correctIndex]
-            explanationText = "❌ Incorrect. The correct answer is \(correctAnswer).\n\n\(problem.explanation)"
+            explanationText = "❌ Incorrect.\n\nThe correct answer is \(correctAnswer).\n\n\(problem.explanation)"
             
-            // Track wrong question
+            // Track wrong question - ensure it's saved
             ProgressTracker.shared.recordWrongQuestion(problemId: problem.id)
+            print("📝 Tracked wrong question: \(problem.id)")
         }
+        
+        // Show feedback AFTER setting explanation
+        showFeedback = true
         
         // Record progress
         ProgressTracker.shared.recordAttempt(difficulty: difficulty, isCorrect: isCorrectAnswer)

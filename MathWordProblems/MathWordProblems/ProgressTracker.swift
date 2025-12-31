@@ -172,9 +172,14 @@ class ProgressTracker: ObservableObject {
     
     // Record wrong question
     func recordWrongQuestion(problemId: UUID) {
+        // Check if already tracked
         if !progress.wrongQuestionIds.contains(problemId) {
             progress.wrongQuestionIds.append(problemId)
+            print("✅ Added wrong question to tracking: \(problemId)")
+            print("📊 Total wrong questions: \(progress.wrongQuestionIds.count)")
             save()
+        } else {
+            print("⚠️ Question already tracked: \(problemId)")
         }
     }
     

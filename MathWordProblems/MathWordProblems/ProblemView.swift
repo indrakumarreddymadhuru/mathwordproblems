@@ -5,6 +5,7 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
+        ScrollView {
             VStack(spacing: 16) {
                 if viewModel.sessionFinished {
                     VStack(spacing: 8) {
@@ -73,7 +74,7 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
 
                     if viewModel.showFeedback {
                         // Feedback message
-                        VStack(spacing: 12) {
+                        VStack(spacing: 16) {
                             HStack {
                                 if viewModel.isCorrectAnswer {
                                     Image(systemName: "checkmark.circle.fill")
@@ -93,57 +94,68 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                                         .foregroundColor(.red)
                                 }
                             }
+                            .padding(.top, 8)
                             
-                            // Always show explanation
-                            VStack(alignment: .leading, spacing: 8) {
+                            // Always show explanation - make it more prominent
+                            VStack(alignment: .leading, spacing: 12) {
                                 Text("Explanation:")
                                     .font(.headline)
-                                    .foregroundColor(.secondary)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.primary)
                                 
                                 Text(viewModel.explanationText)
                                     .font(.body)
                                     .foregroundColor(.primary)
+                                    .multilineTextAlignment(.leading)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
                                     .fixedSize(horizontal: false, vertical: true)
                             }
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
+                            .padding(16)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.gray.opacity(0.15))
                             .cornerRadius(12)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                            )
                         }
-                        .padding(.top, 8)
+                        .padding(.horizontal, 8)
+                        .padding(.top, 12)
 
-                    HStack(spacing: 16) {
-                        if viewModel.hasPreviousProblem {
-                            Button("Previous") {
-                                viewModel.goToPreviousProblem()
+                        // Navigation buttons - user must click to proceed
+                        HStack(spacing: 16) {
+                            if viewModel.hasPreviousProblem {
+                                Button("Previous") {
+                                    viewModel.goToPreviousProblem()
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.gray.opacity(0.2))
+                                .foregroundColor(.primary)
+                                .cornerRadius(12)
                             }
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.gray.opacity(0.2))
-                            .foregroundColor(.primary)
-                            .cornerRadius(12)
-                        }
-                        
-                        if viewModel.hasNextProblem {
-                        Button("Next") {
-                            viewModel.goToNextProblem()
-                        }
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(12)
-                        } else {
-                            Button("Finish") {
-                                viewModel.goToNextProblem()
+                            
+                            if viewModel.hasNextProblem {
+                                Button("Next") {
+                                    viewModel.goToNextProblem()
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(12)
+                            } else {
+                                Button("Finish") {
+                                    viewModel.goToNextProblem()
+                                }
+                                .padding()
+                                .frame(maxWidth: .infinity)
+                                .background(Color.green)
+                                .foregroundColor(.white)
+                                .cornerRadius(12)
                             }
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(12)
                         }
-                    }
-                    .padding(.horizontal)
+                        .padding(.horizontal)
                         .padding(.top, 8)
                     }
 
@@ -151,13 +163,13 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                         .font(.subheadline)
                         .padding(.top, 8)
 
-                    Spacer()
                 } else {
                     Text("No problems available.")
-                Button("Back") { dismiss() }
+                    Button("Back") { dismiss() }
                 }
+            }
+            .padding()
         }
-        .padding()
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .principal) {
