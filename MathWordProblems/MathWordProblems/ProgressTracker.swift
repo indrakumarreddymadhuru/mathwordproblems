@@ -192,7 +192,12 @@ class ProgressTracker: ObservableObject {
         return progress.wrongProblems.count
     }
     
-    // Get wrong problems list
+    // Get wrong problems list - computed property for easy access
+    var wrongProblems: [Problem] {
+        return progress.wrongProblems
+    }
+    
+    // Get wrong problems list (alternative method name)
     var getWrongProblems: [Problem] {
         return progress.wrongProblems
     }

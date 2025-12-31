@@ -50,7 +50,7 @@ struct WrongQuestionsView: View {
                     .padding(.horizontal)
                     .padding(.top)
                     
-                    if progressTracker.wrongProblems.isEmpty {
+                    if progressTracker.progress.wrongProblems.isEmpty {
                         // Empty state
                         VStack(spacing: 16) {
                             Image(systemName: "checkmark.circle.fill")
@@ -71,14 +71,14 @@ struct WrongQuestionsView: View {
                         .padding(.top, 60)
                     } else {
                         // List of wrong questions
-                        ForEach(progressTracker.wrongProblems) { problem in
+                        ForEach(progressTracker.progress.wrongProblems) { problem in
                             WrongQuestionCard(problem: problem)
                         }
                         .padding(.horizontal)
                     }
                     
                     // Clear wrong questions button
-                    if !progressTracker.wrongProblems.isEmpty {
+                    if !progressTracker.progress.wrongProblems.isEmpty {
                         Button(action: {
                             progressTracker.clearWrongQuestions()
                         }) {
