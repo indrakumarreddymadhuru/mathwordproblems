@@ -61,6 +61,12 @@ final class GameViewModel: ObservableObject {
 
         print("✅ Answer selected: index=\(index), correctIndex=\(problem.correct)")
         
+        // CRITICAL: Cancel ANY existing auto-advance work items FIRST, before any state changes
+        // This prevents race conditions where a previous work item might fire
+        autoAdvanceWorkItem?.cancel()
+        autoAdvanceWorkItem = nil
+        print("🛑 Cancelled any existing auto-advance work items")
+        
         selectedAnswerIndex = index
         let correctIndex = problem.correct
         isCorrectAnswer = (index == correctIndex)
@@ -68,15 +74,13 @@ final class GameViewModel: ObservableObject {
         // Update attempts BEFORE showing feedback to ensure score updates immediately
         totalAttempts += 1
         print("📊 Updated: totalAttempts=\(totalAttempts), correctCount=\(correctCount)")
+        print("📊 isCorrectAnswer set to: \(isCorrectAnswer)")
         
         // Always show explanation, especially for wrong answers
         if isCorrectAnswer {
             explanationText = "✅ Correct!\n\n\(problem.explanation)"
             correctCount += 1
             print("✅ Correct answer selected - will auto-advance after 2 seconds")
-            
-            // Cancel any existing auto-advance
-            autoAdvanceWorkItem?.cancel()
             
             // Show feedback first
             showFeedback = true
@@ -87,26 +91,35 @@ final class GameViewModel: ObservableObject {
             // Auto-advance to next question after 2 seconds for correct answers ONLY
             let workItem = DispatchWorkItem { [weak self] in
                 guard let self = self else { return }
-                // CRITICAL: Triple-check conditions - ONLY advance if it's still a correct answer
-                if self.showFeedback && self.isCorrectAnswer && !self.sessionFinished {
-                    // One more check: make sure isCorrectAnswer hasn't changed
-                    if self.isCorrectAnswer {
-                        print("➡️ Auto-advancing to next question (correct answer)")
-                        self.goToNextProblem()
-                    } else {
-                        print("⚠️ Skipping auto-advance: isCorrectAnswer changed to false")
-                    }
-                } else {
+                // CRITICAL: Multiple checks - ONLY advance if it's still a correct answer
+                // Check 1: Basic conditions
+                guard self.showFeedback && self.isCorrectAnswer && !self.sessionFinished else {
                     print("⚠️ Skipping auto-advance: showFeedback=\(self.showFeedback), isCorrect=\(self.isCorrectAnswer), finished=\(self.sessionFinished)")
+                    return
                 }
+                // Check 2: Verify isCorrectAnswer is still true (double-check)
+                guard self.isCorrectAnswer else {
+                    print("⚠️ Skipping auto-advance: isCorrectAnswer changed to false")
+                    return
+                }
+                // Check 3: Verify this work item is still the current one
+                guard self.autoAdvanceWorkItem === workItem else {
+                    print("⚠️ Skipping auto-advance: work item was replaced")
+                    return
+                }
+                // All checks passed - proceed with auto-advance
+                print("➡️ Auto-advancing to next question (correct answer)")
+                self.goToNextProblem()
             }
             autoAdvanceWorkItem = workItem
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
         } else {
             // WRONG ANSWER - Show explanation and wait for user input
-            // CRITICAL: Cancel ANY existing auto-advance work items
-            autoAdvanceWorkItem?.cancel()
-            autoAdvanceWorkItem = nil
+            // CRITICAL: Ensure isCorrectAnswer is false (should already be false, but verify)
+            if isCorrectAnswer {
+                print("❌ ERROR: isCorrectAnswer is true for wrong answer! Forcing to false.")
+                isCorrectAnswer = false
+            }
             
             // Show correct answer and explanation when wrong
             let correctAnswer = problem.answers[correctIndex]
@@ -119,24 +132,36 @@ final class GameViewModel: ObservableObject {
             print("📝 Explanation from JSON: \(problem.explanation)")
             print("📝 Full explanation text: \(explanationText)")
             
-            // Show feedback FIRST - DO NOT auto-advance for wrong answers
+            // Show feedback - DO NOT auto-advance for wrong answers
             // Set showFeedback to true to display explanation
             showFeedback = true
             
             // Record progress
             ProgressTracker.shared.recordAttempt(difficulty: difficulty, isCorrect: isCorrectAnswer)
             
-            // CRITICAL: Ensure isCorrectAnswer is false so auto-advance won't trigger
-            // Double-check that isCorrectAnswer is false (should already be false, but verify)
-            if isCorrectAnswer {
-                print("❌ ERROR: isCorrectAnswer is true for wrong answer! This should never happen!")
-                isCorrectAnswer = false  // Force it to false
+            // CRITICAL: Double-check that auto-advance is cancelled and isCorrectAnswer is false
+            // Verify one more time that no auto-advance work item exists
+            if autoAdvanceWorkItem != nil {
+                print("⚠️ WARNING: Auto-advance work item still exists! Cancelling again...")
+                autoAdvanceWorkItem?.cancel()
+                autoAdvanceWorkItem = nil
             }
             
             print("📊 Feedback shown for wrong answer.")
             print("📊 State: showFeedback=\(showFeedback), isCorrectAnswer=\(isCorrectAnswer), totalAttempts=\(totalAttempts)")
             print("📊 User MUST click Next button to proceed - NO auto-advance will occur")
             print("📊 Auto-advance work item cancelled: \(autoAdvanceWorkItem == nil)")
+            
+            // Final safety check: Ensure no auto-advance can happen
+            // Cancel again after a tiny delay to catch any race conditions
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                guard let self = self else { return }
+                if !self.isCorrectAnswer && self.autoAdvanceWorkItem != nil {
+                    print("🛑 Safety check: Cancelling auto-advance work item for wrong answer")
+                    self.autoAdvanceWorkItem?.cancel()
+                    self.autoAdvanceWorkItem = nil
+                }
+            }
         }
     }
 

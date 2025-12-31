@@ -15,21 +15,23 @@ git status --short
 
 echo ""
 echo "=== Committing ==="
-git commit -m "Fix explanation and Next button not showing for wrong answers
+git commit -m "Fix wrong answer auto-advance issue and onChange deprecation warning
 
 Fixes:
-- Added .id() modifiers to force SwiftUI to update when showFeedback, isCorrectAnswer, or explanationText changes
-- Enhanced debug logging to track when feedback section and Next button render
-- Added .onChange() observers to monitor state changes in ProblemView
-- Improved explanation ScrollView with explicit vertical scrolling and indicators
+- Fixed wrong answers showing briefly then auto-advancing to next question
+- Fixed iOS 17+ onChange deprecation warning by using zero-parameter closure syntax
+- Added aggressive cancellation of auto-advance work items to prevent race conditions
+- Added multiple safety checks and delayed verification to prevent false auto-advance
 
 Changes:
-- ProblemView: Added .id() modifiers to feedback section and Next button to force re-rendering
-- ProblemView: Added comprehensive debug logging for troubleshooting
-- ProblemView: Added .onChange() observers for showFeedback, isCorrectAnswer, and explanationText
-- ProblemView: Improved explanation ScrollView structure with proper vertical scrolling
+- GameViewModel: Cancel auto-advance work items FIRST before any state changes
+- GameViewModel: Added multiple guard checks in work item to prevent false triggers
+- GameViewModel: Added delayed safety check (0.1s) to catch race conditions
+- GameViewModel: Improved state management to ensure isCorrectAnswer is false for wrong answers
+- ProblemView: Updated onChange modifiers to use iOS 17+ zero-parameter closure syntax
+- ProblemView: Enhanced logging in onChange handlers for better debugging
 
-This should fix the issue where explanation text and Next button were not visible after selecting a wrong answer."
+This ensures wrong answers stay visible with explanation until user clicks Next button."
 
 echo ""
 echo "=== Pushing to remote ==="

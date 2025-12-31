@@ -256,14 +256,21 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                     .foregroundColor(.primary)
             }
         }
-        .onChange(of: viewModel.showFeedback) { newValue in
-            print("🔄 ProblemView: showFeedback changed to \(newValue)")
+        .onChange(of: viewModel.showFeedback) {
+            print("🔄 ProblemView: showFeedback changed to \(viewModel.showFeedback)")
+            if viewModel.showFeedback {
+                print("   📊 Current state: isCorrect=\(viewModel.isCorrectAnswer), explanation length=\(viewModel.explanationText.count)")
+            }
         }
-        .onChange(of: viewModel.isCorrectAnswer) { newValue in
-            print("🔄 ProblemView: isCorrectAnswer changed to \(newValue)")
+        .onChange(of: viewModel.isCorrectAnswer) {
+            print("🔄 ProblemView: isCorrectAnswer changed to \(viewModel.isCorrectAnswer)")
+            print("   📊 Current state: showFeedback=\(viewModel.showFeedback)")
         }
-        .onChange(of: viewModel.explanationText) { newValue in
-            print("🔄 ProblemView: explanationText changed, length=\(newValue.count)")
+        .onChange(of: viewModel.explanationText) {
+            print("🔄 ProblemView: explanationText changed, length=\(viewModel.explanationText.count)")
+            if !viewModel.explanationText.isEmpty {
+                print("   📝 Preview: \(viewModel.explanationText.prefix(50))...")
+            }
         }
     }
     
