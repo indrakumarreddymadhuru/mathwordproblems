@@ -95,6 +95,11 @@ final class GameViewModel: ObservableObject {
             autoAdvanceWorkItem = workItem
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
         } else {
+            // WRONG ANSWER - Show explanation and wait for user input
+            // Cancel any existing auto-advance (shouldn't be any, but be safe)
+            autoAdvanceWorkItem?.cancel()
+            autoAdvanceWorkItem = nil
+            
             // Show correct answer and explanation when wrong
             let correctAnswer = problem.answers[correctIndex]
             explanationText = "❌ Incorrect.\n\nThe correct answer is \(correctAnswer).\n\n\(problem.explanation)"
@@ -102,15 +107,17 @@ final class GameViewModel: ObservableObject {
             // Track wrong question - ensure it's saved with full problem data
             ProgressTracker.shared.recordWrongQuestion(problemId: problem.id, problem: problem)
             print("📝 Tracked wrong question: \(problem.id)")
-            print("⚠️ Wrong answer - showing explanation, user must click Next")
+            print("⚠️ Wrong answer selected - showing explanation")
+            print("📝 Explanation text: \(explanationText)")
             
-            // Show feedback - DO NOT auto-advance for wrong answers
+            // Show feedback FIRST - DO NOT auto-advance for wrong answers
             showFeedback = true
             
             // Record progress
             ProgressTracker.shared.recordAttempt(difficulty: difficulty, isCorrect: isCorrectAnswer)
             
-            print("📊 Feedback shown. showFeedback=\(showFeedback), waiting for user to click Next")
+            print("📊 Feedback shown for wrong answer. showFeedback=\(showFeedback), isCorrectAnswer=\(isCorrectAnswer)")
+            print("📊 User MUST click Next button to proceed - NO auto-advance")
         }
     }
 
@@ -118,6 +125,12 @@ final class GameViewModel: ObservableObject {
         guard !sessionProblems.isEmpty, showFeedback else { 
             print("⚠️ Cannot go to next: showFeedback=\(showFeedback)")
             return 
+        }
+        
+        // IMPORTANT: For wrong answers, this should ONLY be called by user clicking Next button
+        // If isCorrectAnswer is false, this means it's a wrong answer and should NOT auto-advance
+        if !isCorrectAnswer {
+            print("✅ User clicked Next button for wrong answer - proceeding to next question")
         }
         
         // Cancel any pending auto-advance

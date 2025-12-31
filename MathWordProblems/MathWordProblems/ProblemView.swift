@@ -96,67 +96,94 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                             }
                             .padding(.top, 8)
                             
-                            // Always show explanation - make it more prominent
+                            // Always show explanation - make it more prominent, especially for wrong answers
                             VStack(alignment: .leading, spacing: 12) {
-                                Text("Explanation:")
-                                    .font(.headline)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.primary)
+                                if !viewModel.isCorrectAnswer {
+                                    // For wrong answers, make it very clear
+                                    HStack {
+                                        Image(systemName: "exclamationmark.triangle.fill")
+                                            .foregroundColor(.orange)
+                                        Text("Why this answer is wrong:")
+                                            .font(.headline)
+                                            .fontWeight(.bold)
+                                            .foregroundColor(.primary)
+                                    }
+                                } else {
+                                    Text("Explanation:")
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.primary)
+                                }
                                 
-                                Text(viewModel.explanationText)
-                                    .font(.body)
-                                    .foregroundColor(.primary)
-                                    .multilineTextAlignment(.leading)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .fixedSize(horizontal: false, vertical: true)
+                                ScrollView {
+                                    Text(viewModel.explanationText)
+                                        .font(.body)
+                                        .foregroundColor(.primary)
+                                        .multilineTextAlignment(.leading)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                }
+                                .frame(maxHeight: 200)
                             }
                             .padding(16)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color.gray.opacity(0.15))
+                            .background(!viewModel.isCorrectAnswer ? Color.orange.opacity(0.1) : Color.gray.opacity(0.15))
                             .cornerRadius(12)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                    .stroke(!viewModel.isCorrectAnswer ? Color.orange.opacity(0.5) : Color.gray.opacity(0.3), lineWidth: 2)
                             )
                         }
                         .padding(.horizontal, 8)
                         .padding(.top, 12)
 
                         // Navigation buttons
-                        // For wrong answers: Show Next button (user must click)
+                        // For wrong answers: Show Next button (user must click) - NO auto-advance
                         // For correct answers: Hide Next button (auto-advances after 2 seconds)
                         if !viewModel.isCorrectAnswer {
-                            // Wrong answer - show Next button, user must click
-                            HStack(spacing: 16) {
-                                if viewModel.hasPreviousProblem {
-                                    Button("Previous") {
-                                        viewModel.goToPreviousProblem()
-                                    }
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.gray.opacity(0.2))
-                                    .foregroundColor(.primary)
-                                    .cornerRadius(12)
-                                }
+                            // WRONG ANSWER - Show Next button, user MUST click to proceed
+                            VStack(spacing: 12) {
+                                // Make explanation more prominent
+                                Text("Please review the explanation above before continuing.")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .italic()
+                                    .multilineTextAlignment(.center)
+                                    .padding(.horizontal)
                                 
-                                if viewModel.hasNextProblem {
-                                    Button("Next") {
-                                        viewModel.goToNextProblem()
+                                HStack(spacing: 16) {
+                                    if viewModel.hasPreviousProblem {
+                                        Button("Previous") {
+                                            viewModel.goToPreviousProblem()
+                                        }
+                                        .padding()
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color.gray.opacity(0.2))
+                                        .foregroundColor(.primary)
+                                        .cornerRadius(12)
                                     }
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(12)
-                                } else {
-                                    Button("Finish") {
-                                        viewModel.goToNextProblem()
+                                    
+                                    if viewModel.hasNextProblem {
+                                        Button("Next Question") {
+                                            viewModel.goToNextProblem()
+                                        }
+                                        .padding()
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color.blue)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(12)
+                                        .fontWeight(.semibold)
+                                    } else {
+                                        Button("Finish") {
+                                            viewModel.goToNextProblem()
+                                        }
+                                        .padding()
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color.green)
+                                        .foregroundColor(.white)
+                                        .cornerRadius(12)
+                                        .fontWeight(.semibold)
                                     }
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.green)
-                                    .foregroundColor(.white)
-                                    .cornerRadius(12)
                                 }
                             }
                             .padding(.horizontal)
