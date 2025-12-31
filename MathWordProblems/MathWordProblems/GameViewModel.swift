@@ -46,8 +46,14 @@ final class GameViewModel: ObservableObject {
     }
 
     func selectAnswer(at index: Int) {
-        guard let problem = currentProblem, !showFeedback else { return }
+        // Prevent double-tapping and ensure we have a problem
+        guard let problem = currentProblem, !showFeedback else { 
+            print("⚠️ Cannot select answer: showFeedback=\(showFeedback), problem=\(currentProblem != nil)")
+            return 
+        }
 
+        print("✅ Answer selected: index=\(index), correctIndex=\(problem.correct)")
+        
         selectedAnswerIndex = index
         totalAttempts += 1
         let correctIndex = problem.correct
@@ -57,25 +63,35 @@ final class GameViewModel: ObservableObject {
         if isCorrectAnswer {
             explanationText = "✅ Correct!\n\n\(problem.explanation)"
             correctCount += 1
+            print("✅ Correct answer selected")
         } else {
             // Show correct answer and explanation when wrong
             let correctAnswer = problem.answers[correctIndex]
             explanationText = "❌ Incorrect.\n\nThe correct answer is \(correctAnswer).\n\n\(problem.explanation)"
             
-            // Track wrong question - ensure it's saved
-            ProgressTracker.shared.recordWrongQuestion(problemId: problem.id)
+            // Track wrong question - ensure it's saved with full problem data
+            ProgressTracker.shared.recordWrongQuestion(problemId: problem.id, problem: problem)
             print("📝 Tracked wrong question: \(problem.id)")
+            print("⚠️ Wrong answer - showing explanation, NOT auto-advancing")
         }
         
         // Show feedback AFTER setting explanation
+        // DO NOT auto-advance - user must click Next/Previous
         showFeedback = true
         
         // Record progress
         ProgressTracker.shared.recordAttempt(difficulty: difficulty, isCorrect: isCorrectAnswer)
+        
+        print("📊 Feedback shown. showFeedback=\(showFeedback), waiting for user to click Next")
     }
 
     func goToNextProblem() {
-        guard !sessionProblems.isEmpty else { return }
+        guard !sessionProblems.isEmpty, showFeedback else { 
+            print("⚠️ Cannot go to next: showFeedback=\(showFeedback)")
+            return 
+        }
+        
+        print("➡️ Moving to next problem")
 
         selectedAnswerIndex = nil  // Reset selection
         
@@ -83,9 +99,11 @@ final class GameViewModel: ObservableObject {
             currentIndex += 1
             currentProblem = sessionProblems[currentIndex]
             showFeedback = false
+            print("✅ Moved to problem \(currentIndex + 1) of \(sessionProblems.count)")
         } else {
             currentProblem = nil
             sessionFinished = true
+            print("✅ Session finished")
         }
     }
     

@@ -20,6 +20,9 @@ struct ProgressData: Codable {
     // Track wrong questions by problem ID
     var wrongQuestionIds: [UUID] = []
     
+    // Store wrong problems with full data for display
+    var wrongProblems: [Problem] = []
+    
     var accuracy: Double {
         guard totalAttemptsToday > 0 else { return 0.0 }
         return Double(correctToday) / Double(totalAttemptsToday) * 100.0
@@ -171,16 +174,27 @@ class ProgressTracker: ObservableObject {
     }
     
     // Record wrong question
-    func recordWrongQuestion(problemId: UUID) {
+    func recordWrongQuestion(problemId: UUID, problem: Problem) {
         // Check if already tracked
         if !progress.wrongQuestionIds.contains(problemId) {
             progress.wrongQuestionIds.append(problemId)
+            progress.wrongProblems.append(problem)
             print("✅ Added wrong question to tracking: \(problemId)")
             print("📊 Total wrong questions: \(progress.wrongQuestionIds.count)")
             save()
         } else {
             print("⚠️ Question already tracked: \(problemId)")
         }
+    }
+    
+    // Get wrong problems count
+    var wrongProblemsCount: Int {
+        return progress.wrongProblems.count
+    }
+    
+    // Get wrong problems list
+    var getWrongProblems: [Problem] {
+        return progress.wrongProblems
     }
     
     // Get wrong questions count
@@ -191,6 +205,7 @@ class ProgressTracker: ObservableObject {
     // Clear wrong questions (optional)
     func clearWrongQuestions() {
         progress.wrongQuestionIds.removeAll()
+        progress.wrongProblems.removeAll()
         save()
     }
     

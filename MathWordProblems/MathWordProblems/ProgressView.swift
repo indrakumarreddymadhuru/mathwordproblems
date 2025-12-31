@@ -3,6 +3,7 @@ import Combine
 struct MyProgressView: View {
     @ObservedObject var progressTracker = ProgressTracker.shared
     @Environment(\.dismiss) var dismiss
+    @State private var showWrongQuestions = false
     
     var body: some View {
         ZStack {
@@ -75,6 +76,17 @@ struct MyProgressView: View {
                                 value: "\(progressTracker.progress.dayStreak)",
                                 label: "Day Streak 🔥",
                                 color: .yellow
+                            )
+                        }
+                        
+                        // Wrong Questions - Clickable (full width)
+                        Button(action: {
+                            showWrongQuestions = true
+                        }) {
+                            StatCard(
+                                value: "\(progressTracker.wrongProblemsCount)",
+                                label: "Wrong Questions ❌",
+                                color: .red
                             )
                         }
                     }
@@ -170,6 +182,9 @@ struct MyProgressView: View {
             }
         }
         .navigationBarHidden(true)
+        .sheet(isPresented: $showWrongQuestions) {
+            WrongQuestionsView()
+        }
     }
 }
 
