@@ -14,6 +14,8 @@ final class GameViewModel: ObservableObject {
     @Published var explanationText: String = ""
     @Published var sessionFinished: Bool = false
     @Published var selectedAnswerIndex: Int? = nil
+    
+    private var autoAdvanceWorkItem: DispatchWorkItem?
 
     let sessionSize: Int = 10  // how many problems per play session
 
@@ -34,6 +36,10 @@ final class GameViewModel: ObservableObject {
             return
         }
 
+        // Cancel any pending auto-advance
+        autoAdvanceWorkItem?.cancel()
+        autoAdvanceWorkItem = nil
+        
         let shuffled = allProblems.shuffled()
         sessionProblems = Array(shuffled.prefix(sessionSize))
         currentIndex = 0
@@ -41,6 +47,7 @@ final class GameViewModel: ObservableObject {
         totalAttempts = 0
         showFeedback = false
         selectedAnswerIndex = nil
+        isCorrectAnswer = false
         sessionFinished = false
         currentProblem = sessionProblems.first
     }
@@ -63,7 +70,30 @@ final class GameViewModel: ObservableObject {
         if isCorrectAnswer {
             explanationText = "✅ Correct!\n\n\(problem.explanation)"
             correctCount += 1
-            print("✅ Correct answer selected")
+            print("✅ Correct answer selected - will auto-advance after 2 seconds")
+            
+            // Cancel any existing auto-advance
+            autoAdvanceWorkItem?.cancel()
+            
+            // Show feedback first
+            showFeedback = true
+            
+            // Record progress
+            ProgressTracker.shared.recordAttempt(difficulty: difficulty, isCorrect: isCorrectAnswer)
+            
+            // Auto-advance to next question after 2 seconds for correct answers
+            let workItem = DispatchWorkItem { [weak self] in
+                guard let self = self else { return }
+                // Double-check conditions before advancing
+                if self.showFeedback && self.isCorrectAnswer && !self.sessionFinished {
+                    print("➡️ Auto-advancing to next question (correct answer)")
+                    self.goToNextProblem()
+                } else {
+                    print("⚠️ Skipping auto-advance: showFeedback=\(self.showFeedback), isCorrect=\(self.isCorrectAnswer), finished=\(self.sessionFinished)")
+                }
+            }
+            autoAdvanceWorkItem = workItem
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
         } else {
             // Show correct answer and explanation when wrong
             let correctAnswer = problem.answers[correctIndex]
@@ -72,17 +102,16 @@ final class GameViewModel: ObservableObject {
             // Track wrong question - ensure it's saved with full problem data
             ProgressTracker.shared.recordWrongQuestion(problemId: problem.id, problem: problem)
             print("📝 Tracked wrong question: \(problem.id)")
-            print("⚠️ Wrong answer - showing explanation, NOT auto-advancing")
+            print("⚠️ Wrong answer - showing explanation, user must click Next")
+            
+            // Show feedback - DO NOT auto-advance for wrong answers
+            showFeedback = true
+            
+            // Record progress
+            ProgressTracker.shared.recordAttempt(difficulty: difficulty, isCorrect: isCorrectAnswer)
+            
+            print("📊 Feedback shown. showFeedback=\(showFeedback), waiting for user to click Next")
         }
-        
-        // Show feedback AFTER setting explanation
-        // DO NOT auto-advance - user must click Next/Previous
-        showFeedback = true
-        
-        // Record progress
-        ProgressTracker.shared.recordAttempt(difficulty: difficulty, isCorrect: isCorrectAnswer)
-        
-        print("📊 Feedback shown. showFeedback=\(showFeedback), waiting for user to click Next")
     }
 
     func goToNextProblem() {
@@ -90,6 +119,10 @@ final class GameViewModel: ObservableObject {
             print("⚠️ Cannot go to next: showFeedback=\(showFeedback)")
             return 
         }
+        
+        // Cancel any pending auto-advance
+        autoAdvanceWorkItem?.cancel()
+        autoAdvanceWorkItem = nil
         
         print("➡️ Moving to next problem")
 
@@ -99,10 +132,12 @@ final class GameViewModel: ObservableObject {
             currentIndex += 1
             currentProblem = sessionProblems[currentIndex]
             showFeedback = false
+            isCorrectAnswer = false  // Reset
             print("✅ Moved to problem \(currentIndex + 1) of \(sessionProblems.count)")
         } else {
             currentProblem = nil
             sessionFinished = true
+            showFeedback = false
             print("✅ Session finished")
         }
     }
@@ -110,12 +145,17 @@ final class GameViewModel: ObservableObject {
     func goToPreviousProblem() {
         guard !sessionProblems.isEmpty else { return }
         
+        // Cancel any pending auto-advance
+        autoAdvanceWorkItem?.cancel()
+        autoAdvanceWorkItem = nil
+        
         selectedAnswerIndex = nil  // Reset selection
         
         if currentIndex > 0 {
             currentIndex -= 1
             currentProblem = sessionProblems[currentIndex]
             showFeedback = false
+            isCorrectAnswer = false  // Reset
         }
     }
     

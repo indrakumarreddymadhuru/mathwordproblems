@@ -122,41 +122,56 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                         .padding(.horizontal, 8)
                         .padding(.top, 12)
 
-                        // Navigation buttons - user must click to proceed
-                        HStack(spacing: 16) {
-                            if viewModel.hasPreviousProblem {
-                                Button("Previous") {
-                                    viewModel.goToPreviousProblem()
+                        // Navigation buttons
+                        // For wrong answers: Show Next button (user must click)
+                        // For correct answers: Hide Next button (auto-advances after 2 seconds)
+                        if !viewModel.isCorrectAnswer {
+                            // Wrong answer - show Next button, user must click
+                            HStack(spacing: 16) {
+                                if viewModel.hasPreviousProblem {
+                                    Button("Previous") {
+                                        viewModel.goToPreviousProblem()
+                                    }
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.gray.opacity(0.2))
+                                    .foregroundColor(.primary)
+                                    .cornerRadius(12)
                                 }
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.gray.opacity(0.2))
-                                .foregroundColor(.primary)
-                                .cornerRadius(12)
+                                
+                                if viewModel.hasNextProblem {
+                                    Button("Next") {
+                                        viewModel.goToNextProblem()
+                                    }
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
+                                } else {
+                                    Button("Finish") {
+                                        viewModel.goToNextProblem()
+                                    }
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
+                                }
                             }
-                            
-                            if viewModel.hasNextProblem {
-                                Button("Next") {
-                                    viewModel.goToNextProblem()
-                                }
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
-                            } else {
-                                Button("Finish") {
-                                    viewModel.goToNextProblem()
-                                }
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.green)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
+                            .padding(.horizontal)
+                            .padding(.top, 8)
+                        } else {
+                            // Correct answer - show "Moving to next question..." message
+                            HStack {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .green))
+                                Text("Moving to next question...")
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
                             }
+                            .padding(.top, 8)
                         }
-                        .padding(.horizontal)
-                        .padding(.top, 8)
                     }
 
                     Text("Score: \(viewModel.correctCount) / \(viewModel.totalAttempts)")
