@@ -144,11 +144,13 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                         .padding(.top, 12)
 
                         // Navigation buttons
-                        // For wrong answers: Show Next button (user must click) - NO auto-advance
+                        // For wrong answers: ALWAYS show Next button (user must click) - NO auto-advance
                         // For correct answers: Hide Next button (auto-advances after 2 seconds)
                         if !viewModel.isCorrectAnswer {
-                            // WRONG ANSWER - Show Next button, user MUST click to proceed
-                            VStack(spacing: 12) {
+                            // WRONG ANSWER - ALWAYS show Next button, user MUST click to proceed
+                            // This block is ONLY shown for wrong answers - Next button is ALWAYS visible here
+                            let _ = print("🔴 Rendering Next button for wrong answer - isCorrectAnswer=\(viewModel.isCorrectAnswer)")
+                            VStack(spacing: 16) {
                                 // Make explanation more prominent
                                 Text("Please review the explanation above before continuing.")
                                     .font(.subheadline)
@@ -157,6 +159,7 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                                     .multilineTextAlignment(.center)
                                     .padding(.horizontal)
                                 
+                                // ALWAYS show Next/Finish button for wrong answers - ALWAYS VISIBLE
                                 HStack(spacing: 16) {
                                     if viewModel.hasPreviousProblem {
                                         Button("Previous") {
@@ -169,31 +172,36 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                                         .cornerRadius(12)
                                     }
                                     
-                                    if viewModel.hasNextProblem {
-                                        Button("Next Question") {
-                                            viewModel.goToNextProblem()
+                                    // CRITICAL: This button is ALWAYS shown for wrong answers
+                                    // No conditional - it's always visible and enabled
+                                    Button(action: {
+                                        print("🔵 Next button clicked for wrong answer")
+                                        print("📊 Current state: showFeedback=\(viewModel.showFeedback), isCorrect=\(viewModel.isCorrectAnswer)")
+                                        viewModel.goToNextProblem()
+                                    }) {
+                                        HStack(spacing: 8) {
+                                            Image(systemName: "arrow.right.circle.fill")
+                                                .font(.title3)
+                                            Text(viewModel.hasNextProblem ? "Next Question" : "Finish")
+                                                .fontWeight(.bold)
                                         }
-                                        .padding()
-                                        .frame(maxWidth: .infinity)
-                                        .background(Color.blue)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(12)
-                                        .fontWeight(.semibold)
-                                    } else {
-                                        Button("Finish") {
-                                            viewModel.goToNextProblem()
-                                        }
-                                        .padding()
-                                        .frame(maxWidth: .infinity)
-                                        .background(Color.green)
-                                        .foregroundColor(.white)
-                                        .cornerRadius(12)
-                                        .fontWeight(.semibold)
                                     }
+                                    .padding(.vertical, 16)
+                                    .frame(maxWidth: .infinity)
+                                    .background(viewModel.hasNextProblem ? Color.blue : Color.green)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(16)
+                                    .font(.headline)
+                                    .shadow(color: (viewModel.hasNextProblem ? Color.blue : Color.green).opacity(0.4), radius: 6, x: 0, y: 3)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .stroke(Color.white.opacity(0.3), lineWidth: 2)
+                                    )
                                 }
                             }
                             .padding(.horizontal)
-                            .padding(.top, 8)
+                            .padding(.top, 12)
+                            .padding(.bottom, 8)
                         } else {
                             // Correct answer - show "Moving to next question..." message
                             HStack {

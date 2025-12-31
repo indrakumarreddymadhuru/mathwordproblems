@@ -84,13 +84,18 @@ final class GameViewModel: ObservableObject {
             // Record progress
             ProgressTracker.shared.recordAttempt(difficulty: difficulty, isCorrect: isCorrectAnswer)
             
-            // Auto-advance to next question after 2 seconds for correct answers
+            // Auto-advance to next question after 2 seconds for correct answers ONLY
             let workItem = DispatchWorkItem { [weak self] in
                 guard let self = self else { return }
-                // Double-check conditions before advancing
+                // CRITICAL: Triple-check conditions - ONLY advance if it's still a correct answer
                 if self.showFeedback && self.isCorrectAnswer && !self.sessionFinished {
-                    print("➡️ Auto-advancing to next question (correct answer)")
-                    self.goToNextProblem()
+                    // One more check: make sure isCorrectAnswer hasn't changed
+                    if self.isCorrectAnswer {
+                        print("➡️ Auto-advancing to next question (correct answer)")
+                        self.goToNextProblem()
+                    } else {
+                        print("⚠️ Skipping auto-advance: isCorrectAnswer changed to false")
+                    }
                 } else {
                     print("⚠️ Skipping auto-advance: showFeedback=\(self.showFeedback), isCorrect=\(self.isCorrectAnswer), finished=\(self.sessionFinished)")
                 }
