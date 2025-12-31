@@ -15,17 +15,21 @@ git status --short
 
 echo ""
 echo "=== Committing ==="
-git commit -m "Fix scrolling in WrongQuestionsView - restructure to use ScrollView as main container
+git commit -m "Fix explanation and Next button not showing for wrong answers
 
 Fixes:
-- Restructured WrongQuestionsView to make ScrollView the main container instead of inside ZStack
-- Moved gradient background to .background() modifier to avoid layout conflicts
-- Removed ZStack that was interfering with scroll calculations
-- ScrollView now properly calculates scrollable content area
+- Added .id() modifiers to force SwiftUI to update when showFeedback, isCorrectAnswer, or explanationText changes
+- Enhanced debug logging to track when feedback section and Next button render
+- Added .onChange() observers to monitor state changes in ProblemView
+- Improved explanation ScrollView with explicit vertical scrolling and indicators
 
 Changes:
-- WrongQuestionsView: ScrollView is now top-level, gradient applied via .background()
-- This ensures proper scrolling behavior when content exceeds screen height"
+- ProblemView: Added .id() modifiers to feedback section and Next button to force re-rendering
+- ProblemView: Added comprehensive debug logging for troubleshooting
+- ProblemView: Added .onChange() observers for showFeedback, isCorrectAnswer, and explanationText
+- ProblemView: Improved explanation ScrollView structure with proper vertical scrolling
+
+This should fix the issue where explanation text and Next button were not visible after selecting a wrong answer."
 
 echo ""
 echo "=== Pushing to remote ==="

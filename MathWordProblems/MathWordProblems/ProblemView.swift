@@ -78,6 +78,7 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
 
                     if viewModel.showFeedback {
                         // Feedback message - CRITICAL: This must stay visible for wrong answers
+                        let _ = print("🟢 ProblemView: Rendering feedback section - showFeedback=\(viewModel.showFeedback), isCorrect=\(viewModel.isCorrectAnswer), explanationText length=\(viewModel.explanationText.count)")
                         VStack(spacing: 16) {
                             HStack {
                                 if viewModel.isCorrectAnswer {
@@ -121,15 +122,20 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                                         .foregroundColor(.primary)
                                 }
                                 
-                                ScrollView {
-                                    Text(viewModel.explanationText)
-                                        .font(.body)
-                                        .foregroundColor(.primary)
-                                        .multilineTextAlignment(.leading)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .fixedSize(horizontal: false, vertical: true)
+                                // Show explanation text - ensure it's visible
+                                ScrollView(.vertical, showsIndicators: true) {
+                                    VStack(alignment: .leading, spacing: 8) {
+                                        Text(viewModel.explanationText)
+                                            .font(.body)
+                                            .foregroundColor(.primary)
+                                            .multilineTextAlignment(.leading)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                    }
+                                    .padding(.vertical, 4)
                                 }
                                 .frame(maxHeight: 200)
+                                .id("explanation-\(viewModel.explanationText.prefix(20))") // Force update when explanation changes
                             }
                             .padding(16)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -142,6 +148,7 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                         }
                         .padding(.horizontal, 8)
                         .padding(.top, 12)
+                        .id("feedback-\(viewModel.showFeedback)-\(viewModel.isCorrectAnswer)") // Force SwiftUI to update
 
                         // Navigation buttons
                         // For wrong answers: ALWAYS show Next button (user must click) - NO auto-advance
@@ -149,7 +156,7 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                         if !viewModel.isCorrectAnswer {
                             // WRONG ANSWER - ALWAYS show Next button, user MUST click to proceed
                             // This block is ONLY shown for wrong answers - Next button is ALWAYS visible here
-                            let _ = print("🔴 Rendering Next button for wrong answer - isCorrectAnswer=\(viewModel.isCorrectAnswer)")
+                            let _ = print("🔴 ProblemView: Rendering Next button for wrong answer - isCorrectAnswer=\(viewModel.isCorrectAnswer), showFeedback=\(viewModel.showFeedback)")
                             VStack(spacing: 16) {
                                 // Make explanation more prominent
                                 Text("Please review the explanation above before continuing.")
@@ -202,6 +209,7 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                             .padding(.horizontal)
                             .padding(.top, 12)
                             .padding(.bottom, 8)
+                            .id("next-button-\(viewModel.isCorrectAnswer)-\(viewModel.showFeedback)") // Force SwiftUI to update
                         } else {
                             // Correct answer - show "Moving to next question..." message
                             HStack {
@@ -247,6 +255,15 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
             }
+        }
+        .onChange(of: viewModel.showFeedback) { newValue in
+            print("🔄 ProblemView: showFeedback changed to \(newValue)")
+        }
+        .onChange(of: viewModel.isCorrectAnswer) { newValue in
+            print("🔄 ProblemView: isCorrectAnswer changed to \(newValue)")
+        }
+        .onChange(of: viewModel.explanationText) { newValue in
+            print("🔄 ProblemView: explanationText changed, length=\(newValue.count)")
         }
     }
     
