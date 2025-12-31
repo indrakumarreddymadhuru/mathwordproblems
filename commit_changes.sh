@@ -15,23 +15,25 @@ git status --short
 
 echo ""
 echo "=== Committing ==="
-git commit -m "Fix wrong answer auto-advance issue and onChange deprecation warning
+git commit -m "Add Assets.xcassets structure for app icons and fix build error
 
 Fixes:
-- Fixed wrong answers showing briefly then auto-advancing to next question
-- Fixed iOS 17+ onChange deprecation warning by using zero-parameter closure syntax
-- Added aggressive cancellation of auto-advance work items to prevent race conditions
-- Added multiple safety checks and delayed verification to prevent false auto-advance
+- Fixed build error: Closure captures 'workItem' before it is declared
+- Removed work item comparison check that was causing compilation error
+- Simplified auto-advance work item validation
+
+Additions:
+- Created Assets.xcassets structure with AppIcon.appiconset
+- Added Contents.json files for asset catalog
+- Added README.md with instructions for adding app icons
+- Updated project.yml to include Assets.xcassets in resources
 
 Changes:
-- GameViewModel: Cancel auto-advance work items FIRST before any state changes
-- GameViewModel: Added multiple guard checks in work item to prevent false triggers
-- GameViewModel: Added delayed safety check (0.1s) to catch race conditions
-- GameViewModel: Improved state management to ensure isCorrectAnswer is false for wrong answers
-- ProblemView: Updated onChange modifiers to use iOS 17+ zero-parameter closure syntax
-- ProblemView: Enhanced logging in onChange handlers for better debugging
+- GameViewModel: Removed workItem reference in closure to fix build error
+- GameViewModel: Simplified work item validation (state checks are sufficient)
+- project.yml: Added Assets.xcassets to resources section
 
-This ensures wrong answers stay visible with explanation until user clicks Next button."
+The Assets.xcassets structure is now ready for app icon addition. Users can drag a 1024x1024 PNG image to the AppIcon set in Xcode."
 
 echo ""
 echo "=== Pushing to remote ==="

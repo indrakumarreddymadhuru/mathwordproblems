@@ -1,0 +1,163 @@
+[
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "problem": "Emma has 5 apples. She gives 2 apples to her friend. How many apples does Emma have left?",
+    "answers": [2, 3, 4, 5],
+    "correct": 1,
+    "explanation": "Emma started with 5 apples and gave away 2, so 5 - 2 = 3 apples remaining.",
+    "emoji": "🍎"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "problem": "There are 3 birds on a tree. 4 more birds join them. How many birds are there in total?",
+    "answers": [6, 7, 8, 9],
+    "correct": 1,
+    "explanation": "You start with 3 birds and add 4 more, so 3 + 4 = 7 birds total.",
+    "emoji": "🐦"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "problem": "Tommy has 8 toy cars. He buys 3 more toy cars. How many toy cars does Tommy have now?",
+    "answers": [10, 11, 12, 13],
+    "correct": 1,
+    "explanation": "Tommy had 8 cars and bought 3 more, so 8 + 3 = 11 cars in total.",
+    "emoji": "🚗"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "problem": "Sarah has 10 stickers. She uses 4 stickers. How many stickers does she have left?",
+    "answers": [4, 5, 6, 7],
+    "correct": 2,
+    "explanation": "Sarah started with 10 stickers and used 4, so 10 - 4 = 6 stickers remaining.",
+    "emoji": "⭐"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "problem": "There are 2 rabbits in a garden. Each rabbit has 4 carrots. How many carrots are there in total?",
+    "answers": [6, 7, 8, 9],
+    "correct": 2,
+    "explanation": "2 rabbits × 4 carrots each = 8 carrots total.",
+    "emoji": "🥕"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440006",
+    "problem": "Lucas has 12 marbles. He loses 5 marbles. How many marbles does he have now?",
+    "answers": [5, 6, 7, 8],
+    "correct": 2,
+    "explanation": "Lucas had 12 marbles and lost 5, so 12 - 5 = 7 marbles remaining.",
+    "emoji": "🔴"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440007",
+    "problem": "A pizza is cut into 8 slices. Maria eats 3 slices. How many slices are left?",
+    "answers": [3, 4, 5, 6],
+    "correct": 2,
+    "explanation": "The pizza had 8 slices, and Maria ate 3, so 8 - 3 = 5 slices remaining.",
+    "emoji": "🍕"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440008",
+    "problem": "There are 6 flowers in a vase. Anna adds 7 more flowers. How many flowers are in the vase now?",
+    "answers": [12, 13, 14, 15],
+    "correct": 1,
+    "explanation": "There were 6 flowers and 7 more were added, so 6 + 7 = 13 flowers total.",
+    "emoji": "🌸"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440009",
+    "problem": "David has 9 pencils. He gives 3 pencils to his sister. How many pencils does David have left?",
+    "answers": [4, 5, 6, 7],
+    "correct": 2,
+    "explanation": "David had 9 pencils and gave away 3, so 9 - 3 = 6 pencils remaining.",
+    "emoji": "✏️"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440010",
+    "problem": "A box contains 15 cookies. The family eats 6 cookies. How many cookies are left in the box?",
+    "answers": [7, 8, 9, 10],
+    "correct": 2,
+    "explanation": "There were 15 cookies and 6 were eaten, so 15 - 6 = 9 cookies remaining.",
+    "emoji": "🍪"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440011",
+    "problem": "There are 4 cats in a room. Each cat has 2 kittens. How many kittens are there in total?",
+    "answers": [6, 7, 8, 9],
+    "correct": 2,
+    "explanation": "4 cats × 2 kittens each = 8 kittens total.",
+    "emoji": "🐱"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440012",
+    "problem": "Sophia has 7 balloons. 2 balloons pop. How many balloons does Sophia have left?",
+    "answers": [3, 4, 5, 6],
+    "correct": 2,
+    "explanation": "Sophia had 7 balloons and 2 popped, so 7 - 2 = 5 balloons remaining.",
+    "emoji": "🎈"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440013",
+    "problem": "There are 5 ducks in a pond. 6 more ducks arrive. How many ducks are in the pond now?",
+    "answers": [10, 11, 12, 13],
+    "correct": 1,
+    "explanation": "There were 5 ducks and 6 more arrived, so 5 + 6 = 11 ducks total.",
+    "emoji": "🦆"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440014",
+    "problem": "James has 14 candies. He shares 8 candies with friends. How many candies does James have left?",
+    "answers": [5, 6, 7, 8],
+    "correct": 1,
+    "explanation": "James had 14 candies and shared 8, so 14 - 8 = 6 candies remaining.",
+    "emoji": "🍬"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440015",
+    "problem": "A garden has 3 rows of flowers. Each row has 5 flowers. How many flowers are in the garden?",
+    "answers": [13, 14, 15, 16],
+    "correct": 2,
+    "explanation": "3 rows × 5 flowers each = 15 flowers total.",
+    "emoji": "🌺"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440016",
+    "problem": "There are 16 eggs in a carton. Mom uses 9 eggs to bake a cake. How many eggs are left?",
+    "answers": [5, 6, 7, 8],
+    "correct": 2,
+    "explanation": "There were 16 eggs and 9 were used, so 16 - 9 = 7 eggs remaining.",
+    "emoji": "🥚"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440017",
+    "problem": "A bus has 11 passengers. At the next stop, 5 more passengers get on. How many passengers are on the bus now?",
+    "answers": [15, 16, 17, 18],
+    "correct": 1,
+    "explanation": "There were 11 passengers and 5 more got on, so 11 + 5 = 16 passengers total.",
+    "emoji": "🚌"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440018",
+    "problem": "Olivia has 13 books. She gives 4 books to her friend. How many books does Olivia have left?",
+    "answers": [8, 9, 10, 11],
+    "correct": 1,
+    "explanation": "Olivia had 13 books and gave away 4, so 13 - 4 = 9 books remaining.",
+    "emoji": "📚"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440019",
+    "problem": "There are 4 baskets. Each basket contains 6 apples. How many apples are there in total?",
+    "answers": [20, 22, 24, 26],
+    "correct": 2,
+    "explanation": "4 baskets × 6 apples each = 24 apples total.",
+    "emoji": "🧺"
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440020",
+    "problem": "Michael has 18 toy blocks. He uses 9 blocks to build a tower. How many blocks does he have left?",
+    "answers": [7, 8, 9, 10],
+    "correct": 2,
+    "explanation": "Michael had 18 blocks and used 9, so 18 - 9 = 9 blocks remaining.",
+    "emoji": "🧱"
+  }
+]
+

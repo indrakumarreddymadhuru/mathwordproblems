@@ -1,0 +1,163 @@
+[
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440001",
+    "problem": "A store sells 24 apples on Monday and 18 apples on Tuesday. If they sold 15 apples on Wednesday, how many apples did they sell in total over the three days?",
+    "answers": [55, 56, 57, 58],
+    "correct": 2,
+    "explanation": "Add all three days: 24 + 18 + 15 = 57 apples total.",
+    "emoji": "🍎"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440002",
+    "problem": "Emma reads 12 pages of a book on Monday, 15 pages on Tuesday, and 8 pages on Wednesday. How many pages did she read in total?",
+    "answers": [33, 34, 35, 36],
+    "correct": 2,
+    "explanation": "Add all three days: 12 + 15 + 8 = 35 pages total.",
+    "emoji": "📖"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440003",
+    "problem": "A box contains 48 pencils. If the pencils are shared equally among 6 students, how many pencils does each student get?",
+    "answers": [6, 7, 8, 9],
+    "correct": 2,
+    "explanation": "Divide 48 pencils by 6 students: 48 ÷ 6 = 8 pencils per student.",
+    "emoji": "✏️"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440004",
+    "problem": "Tom saves $5 each week. After 9 weeks, how much money has Tom saved?",
+    "answers": [40, 45, 50, 55],
+    "correct": 1,
+    "explanation": "Multiply $5 per week by 9 weeks: 5 × 9 = $45 saved.",
+    "emoji": "💰"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440005",
+    "problem": "Sarah has 56 stickers. She wants to put them into albums, with 8 stickers per album. How many albums does she need?",
+    "answers": [6, 7, 8, 9],
+    "correct": 1,
+    "explanation": "Divide 56 stickers by 8 per album: 56 ÷ 8 = 7 albums needed.",
+    "emoji": "📔"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440006",
+    "problem": "A train travels 120 miles in 3 hours. If it travels at the same speed, how far will it travel in 5 hours?",
+    "answers": [190, 200, 210, 220],
+    "correct": 1,
+    "explanation": "First find speed: 120 ÷ 3 = 40 mph. Then distance in 5 hours: 40 × 5 = 200 miles.",
+    "emoji": "🚂"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440007",
+    "problem": "There are 72 cookies to be shared equally among 9 friends. How many cookies does each friend get?",
+    "answers": [7, 8, 9, 10],
+    "correct": 1,
+    "explanation": "Divide 72 cookies by 9 friends: 72 ÷ 9 = 8 cookies per friend.",
+    "emoji": "🍪"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440008",
+    "problem": "A garden has 4 rows of vegetables. Each row has 12 plants. How many plants are in the garden?",
+    "answers": [44, 46, 48, 50],
+    "correct": 2,
+    "explanation": "Multiply 4 rows by 12 plants each: 4 × 12 = 48 plants total.",
+    "emoji": "🥬"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440009",
+    "problem": "Lucas had $35. He spent $18 on a toy and $12 on a book. How much money does he have left?",
+    "answers": [3, 4, 5, 6],
+    "correct": 2,
+    "explanation": "Subtract both purchases: $35 - $18 - $12 = $5 remaining.",
+    "emoji": "💵"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440010",
+    "problem": "A pizza is cut into 12 slices. If a family of 4 shares it equally, how many slices does each person get?",
+    "answers": [2, 3, 4, 5],
+    "correct": 1,
+    "explanation": "Divide 12 slices by 4 people: 12 ÷ 4 = 3 slices per person.",
+    "emoji": "🍕"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440011",
+    "problem": "Anna bakes 6 batches of cookies. Each batch has 8 cookies. How many cookies does Anna bake in total?",
+    "answers": [46, 48, 50, 52],
+    "correct": 1,
+    "explanation": "Multiply 6 batches by 8 cookies each: 6 × 8 = 48 cookies total.",
+    "emoji": "🍪"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440012",
+    "problem": "David has 63 marbles. He wants to divide them into groups of 9. How many groups can he make?",
+    "answers": [6, 7, 8, 9],
+    "correct": 1,
+    "explanation": "Divide 63 marbles by 9 per group: 63 ÷ 9 = 7 groups.",
+    "emoji": "🔴"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440013",
+    "problem": "A store had 84 oranges. They sold 36 oranges in the morning and 28 in the afternoon. How many oranges are left?",
+    "answers": [18, 19, 20, 21],
+    "correct": 2,
+    "explanation": "Subtract both sales: 84 - 36 - 28 = 20 oranges remaining.",
+    "emoji": "🍊"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440014",
+    "problem": "Sophia walks 3 miles every day. How many miles does she walk in 2 weeks (14 days)?",
+    "answers": [40, 41, 42, 43],
+    "correct": 2,
+    "explanation": "Multiply 3 miles per day by 14 days: 3 × 14 = 42 miles total.",
+    "emoji": "🚶"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440015",
+    "problem": "A classroom has 30 students. The teacher wants to make groups of 5 for an activity. How many groups can be made?",
+    "answers": [5, 6, 7, 8],
+    "correct": 1,
+    "explanation": "Divide 30 students by 5 per group: 30 ÷ 5 = 6 groups.",
+    "emoji": "👥"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440016",
+    "problem": "James buys 7 packs of trading cards. Each pack has 6 cards. How many cards does James have in total?",
+    "answers": [40, 42, 44, 46],
+    "correct": 1,
+    "explanation": "Multiply 7 packs by 6 cards each: 7 × 6 = 42 cards total.",
+    "emoji": "🃏"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440017",
+    "problem": "A library has 90 books. If they organize them into shelves with 10 books each, how many shelves are needed?",
+    "answers": [8, 9, 10, 11],
+    "correct": 1,
+    "explanation": "Divide 90 books by 10 per shelf: 90 ÷ 10 = 9 shelves needed.",
+    "emoji": "📚"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440018",
+    "problem": "Olivia collected 54 seashells. She wants to put them in boxes, with 9 seashells per box. How many boxes does she need?",
+    "answers": [5, 6, 7, 8],
+    "correct": 1,
+    "explanation": "Divide 54 seashells by 9 per box: 54 ÷ 9 = 6 boxes needed.",
+    "emoji": "🐚"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440019",
+    "problem": "A bakery makes 8 batches of cupcakes per day. Each batch has 12 cupcakes. How many cupcakes are made in 5 days?",
+    "answers": [470, 480, 490, 500],
+    "correct": 1,
+    "explanation": "First calculate per day: 8 × 12 = 96 cupcakes. Then multiply by 5 days: 96 × 5 = 480 cupcakes.",
+    "emoji": "🧁"
+  },
+  {
+    "id": "660e8400-e29b-41d4-a716-446655440020",
+    "problem": "Michael has $52. He buys a video game for $28 and a controller for $15. How much money does he have left?",
+    "answers": [7, 8, 9, 10],
+    "correct": 2,
+    "explanation": "Subtract both purchases: $52 - $28 - $15 = $9 remaining.",
+    "emoji": "🎮"
+  }
+]
+

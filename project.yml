@@ -19,6 +19,8 @@ targets:
     resources:
       - path: MathWordProblems/Resources
         type: folder
+      - path: MathWordProblems/Assets.xcassets
+        type: folder
     info:
       path: MathWordProblems/Info.plist
       properties:
