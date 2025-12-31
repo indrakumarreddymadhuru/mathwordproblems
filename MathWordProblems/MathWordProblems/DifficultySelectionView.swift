@@ -105,7 +105,9 @@ struct DifficultySelectionView: View {
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarHidden(true)
             .sheet(isPresented: $showProgress) {
-                MyProgressView()
+                NavigationView {
+                    MyProgressView()
+                }
             }
         }
     }

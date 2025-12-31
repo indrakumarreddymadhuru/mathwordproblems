@@ -4,6 +4,11 @@ struct WrongQuestionsView: View {
     @ObservedObject var progressTracker = ProgressTracker.shared
     @Environment(\.dismiss) var dismiss
     
+    init() {
+        // Ensure smooth scrolling
+        UIScrollView.appearance().bounces = true
+    }
+    
     var body: some View {
         ZStack {
             // Gradient background
@@ -17,7 +22,7 @@ struct WrongQuestionsView: View {
             )
             .ignoresSafeArea()
             
-            ScrollView {
+            ScrollView(.vertical, showsIndicators: true) {
                 VStack(spacing: 20) {
                     // Header
                     HStack {
@@ -69,10 +74,13 @@ struct WrongQuestionsView: View {
                                 .padding(.horizontal)
                         }
                         .padding(.top, 60)
+                        .frame(maxWidth: .infinity)
                     } else {
-                        // List of wrong questions
-                        ForEach(progressTracker.progress.wrongProblems) { problem in
-                            WrongQuestionCard(problem: problem)
+                        // List of wrong questions - Use LazyVStack for better scrolling performance
+                        LazyVStack(spacing: 16) {
+                            ForEach(progressTracker.progress.wrongProblems) { problem in
+                                WrongQuestionCard(problem: problem)
+                            }
                         }
                         .padding(.horizontal)
                     }
@@ -101,6 +109,7 @@ struct WrongQuestionsView: View {
                     Spacer(minLength: 40)
                 }
                 .padding(.vertical)
+                .frame(maxWidth: .infinity)
             }
         }
         .navigationBarHidden(true)

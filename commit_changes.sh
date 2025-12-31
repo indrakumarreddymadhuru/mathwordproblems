@@ -15,20 +15,18 @@ git status --short
 
 echo ""
 echo "=== Committing ==="
-git commit -m "Fix wrong answers: Show JSON explanation, fix score updates, make wrong questions scrollable
+git commit -m "Fix scrolling in WrongQuestionsView and remove popup - use NavigationLink
 
 Fixes:
-- Wrong answers now properly show explanation from JSON
-- Score now updates correctly in real-time for each answer  
-- Wrong questions screen is now fully scrollable with LazyVStack
-- Each wrong question card's explanation is scrollable
+- Fixed scrolling in WrongQuestionsView by using LazyVStack inside ScrollView
+- Changed wrong questions from popup (.sheet) to NavigationLink for push navigation
+- Added scroll indicators and proper frame constraints for smooth scrolling
+- Wrapped MyProgressView in NavigationView when presented as sheet
 
-Improvements:
-- Enhanced explanation display with scrollable areas
-- Score display uses .id() modifier and .onChange() observers
-- Added comprehensive logging to verify explanation from JSON
-- Made wrong questions list use LazyVStack for better performance
-- Added scroll indicators to all ScrollViews"
+Changes:
+- WrongQuestionsView: Added LazyVStack, explicit ScrollView(.vertical), frame constraints
+- ProgressView: Changed Button to NavigationLink for wrong questions
+- DifficultySelectionView: Wrapped MyProgressView in NavigationView for NavigationLink support"
 
 echo ""
 echo "=== Pushing to remote ==="
