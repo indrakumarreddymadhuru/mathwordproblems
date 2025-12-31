@@ -15,18 +15,17 @@ git status --short
 
 echo ""
 echo "=== Committing ==="
-git commit -m "Fix scrolling in WrongQuestionsView and remove popup - use NavigationLink
+git commit -m "Fix scrolling in WrongQuestionsView - restructure to use ScrollView as main container
 
 Fixes:
-- Fixed scrolling in WrongQuestionsView by using LazyVStack inside ScrollView
-- Changed wrong questions from popup (.sheet) to NavigationLink for push navigation
-- Added scroll indicators and proper frame constraints for smooth scrolling
-- Wrapped MyProgressView in NavigationView when presented as sheet
+- Restructured WrongQuestionsView to make ScrollView the main container instead of inside ZStack
+- Moved gradient background to .background() modifier to avoid layout conflicts
+- Removed ZStack that was interfering with scroll calculations
+- ScrollView now properly calculates scrollable content area
 
 Changes:
-- WrongQuestionsView: Added LazyVStack, explicit ScrollView(.vertical), frame constraints
-- ProgressView: Changed Button to NavigationLink for wrong questions
-- DifficultySelectionView: Wrapped MyProgressView in NavigationView for NavigationLink support"
+- WrongQuestionsView: ScrollView is now top-level, gradient applied via .background()
+- This ensures proper scrolling behavior when content exceeds screen height"
 
 echo ""
 echo "=== Pushing to remote ==="

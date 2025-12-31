@@ -10,8 +10,96 @@ struct WrongQuestionsView: View {
     }
     
     var body: some View {
-        ZStack {
-            // Gradient background
+        ScrollView {
+            VStack(spacing: 20) {
+                // Header
+                HStack {
+                    Button("← Back") {
+                        dismiss()
+                    }
+                    .foregroundColor(.white)
+                    .font(.headline)
+                    
+                    Spacer()
+                    
+                    VStack(spacing: 4) {
+                        Text("❌ Wrong Questions")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        
+                        Text("\(progressTracker.wrongProblemsCount) questions")
+                            .font(.subheadline)
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+                    
+                    Spacer()
+                    
+                    // Spacer for balance
+                    Text("← Back")
+                        .foregroundColor(.clear)
+                        .font(.headline)
+                }
+                .padding(.horizontal)
+                .padding(.top)
+                
+                if progressTracker.progress.wrongProblems.isEmpty {
+                    // Empty state
+                    VStack(spacing: 16) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 64))
+                            .foregroundColor(.green)
+                        
+                        Text("No Wrong Questions!")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                        
+                        Text("Great job! You haven't answered any questions incorrectly yet.")
+                            .font(.body)
+                            .foregroundColor(.white.opacity(0.8))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+                    .padding(.top, 60)
+                    .frame(maxWidth: .infinity)
+                } else {
+                    // List of wrong questions - Use VStack for proper scrolling
+                    VStack(spacing: 16) {
+                        ForEach(progressTracker.progress.wrongProblems) { problem in
+                            WrongQuestionCard(problem: problem)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                
+                // Clear wrong questions button
+                if !progressTracker.progress.wrongProblems.isEmpty {
+                    Button(action: {
+                        progressTracker.clearWrongQuestions()
+                    }) {
+                        HStack {
+                            Image(systemName: "trash")
+                            Text("Clear Wrong Questions")
+                                .fontWeight(.semibold)
+                        }
+                        .font(.body)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red.opacity(0.7))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                }
+                
+                // Bottom padding to ensure last item is fully visible
+                Spacer(minLength: 40)
+            }
+            .padding(.vertical)
+        }
+        .background(
             LinearGradient(
                 gradient: Gradient(colors: [
                     Color(red: 122/255, green: 120/255, blue: 255/255),
@@ -21,97 +109,7 @@ struct WrongQuestionsView: View {
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-            
-            ScrollView(.vertical, showsIndicators: true) {
-                VStack(spacing: 20) {
-                    // Header
-                    HStack {
-                        Button("← Back") {
-                            dismiss()
-                        }
-                        .foregroundColor(.white)
-                        .font(.headline)
-                        
-                        Spacer()
-                        
-                        VStack(spacing: 4) {
-                            Text("❌ Wrong Questions")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                            
-                            Text("\(progressTracker.wrongProblemsCount) questions")
-                                .font(.subheadline)
-                                .foregroundColor(.white.opacity(0.8))
-                        }
-                        
-                        Spacer()
-                        
-                        // Spacer for balance
-                        Text("← Back")
-                            .foregroundColor(.clear)
-                            .font(.headline)
-                    }
-                    .padding(.horizontal)
-                    .padding(.top)
-                    
-                    if progressTracker.progress.wrongProblems.isEmpty {
-                        // Empty state
-                        VStack(spacing: 16) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 64))
-                                .foregroundColor(.green)
-                            
-                            Text("No Wrong Questions!")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .foregroundColor(.white)
-                            
-                            Text("Great job! You haven't answered any questions incorrectly yet.")
-                                .font(.body)
-                                .foregroundColor(.white.opacity(0.8))
-                                .multilineTextAlignment(.center)
-                                .padding(.horizontal)
-                        }
-                        .padding(.top, 60)
-                        .frame(maxWidth: .infinity)
-                    } else {
-                        // List of wrong questions - Use LazyVStack for better scrolling performance
-                        LazyVStack(spacing: 16) {
-                            ForEach(progressTracker.progress.wrongProblems) { problem in
-                                WrongQuestionCard(problem: problem)
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                    
-                    // Clear wrong questions button
-                    if !progressTracker.progress.wrongProblems.isEmpty {
-                        Button(action: {
-                            progressTracker.clearWrongQuestions()
-                        }) {
-                            HStack {
-                                Image(systemName: "trash")
-                                Text("Clear Wrong Questions")
-                                    .fontWeight(.semibold)
-                            }
-                            .font(.body)
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red.opacity(0.7))
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                        }
-                        .padding(.horizontal)
-                        .padding(.top, 8)
-                    }
-                    
-                    Spacer(minLength: 40)
-                }
-                .padding(.vertical)
-                .frame(maxWidth: .infinity)
-            }
-        }
+        )
         .navigationBarHidden(true)
     }
 }
