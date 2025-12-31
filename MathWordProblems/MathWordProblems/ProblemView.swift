@@ -7,6 +7,10 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
+                // Debug: Show current state (remove in production if needed)
+                // Text("Debug: showFeedback=\(viewModel.showFeedback), isCorrect=\(viewModel.isCorrectAnswer)")
+                //     .font(.caption)
+                //     .foregroundColor(.gray)
                 if viewModel.sessionFinished {
                     VStack(spacing: 8) {
                         Text("Great work!")
@@ -73,7 +77,7 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                     .padding(.horizontal)
 
                     if viewModel.showFeedback {
-                        // Feedback message
+                        // Feedback message - CRITICAL: This must stay visible for wrong answers
                         VStack(spacing: 16) {
                             HStack {
                                 if viewModel.isCorrectAnswer {
@@ -85,13 +89,15 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                                         .fontWeight(.bold)
                                         .foregroundColor(.green)
                                 } else {
+                                    // WRONG ANSWER - Make it very clear
                                     Image(systemName: "xmark.circle.fill")
                                         .foregroundColor(.red)
                                         .font(.title2)
-                                    Text("Incorrect")
-                                        .font(.title2)
+                                    Text("Incorrect - Review the explanation below")
+                                        .font(.title3)
                                         .fontWeight(.bold)
                                         .foregroundColor(.red)
+                                        .multilineTextAlignment(.center)
                                 }
                             }
                             .padding(.top, 8)
@@ -201,9 +207,17 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                         }
                     }
 
-                    Text("Score: \(viewModel.correctCount) / \(viewModel.totalAttempts)")
-                        .font(.subheadline)
-                        .padding(.top, 8)
+                    // Score display - always visible and updates in real-time
+                    HStack {
+                        Text("Score:")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                        Text("\(viewModel.correctCount) / \(viewModel.totalAttempts)")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.primary)
+                    }
+                    .padding(.top, 8)
 
                 } else {
                     Text("No problems available.")

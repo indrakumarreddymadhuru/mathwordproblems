@@ -62,9 +62,12 @@ final class GameViewModel: ObservableObject {
         print("✅ Answer selected: index=\(index), correctIndex=\(problem.correct)")
         
         selectedAnswerIndex = index
-        totalAttempts += 1
         let correctIndex = problem.correct
         isCorrectAnswer = (index == correctIndex)
+        
+        // Update attempts BEFORE showing feedback to ensure score updates immediately
+        totalAttempts += 1
+        print("📊 Updated: totalAttempts=\(totalAttempts), correctCount=\(correctCount)")
         
         // Always show explanation, especially for wrong answers
         if isCorrectAnswer {
@@ -96,7 +99,7 @@ final class GameViewModel: ObservableObject {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0, execute: workItem)
         } else {
             // WRONG ANSWER - Show explanation and wait for user input
-            // Cancel any existing auto-advance (shouldn't be any, but be safe)
+            // CRITICAL: Cancel ANY existing auto-advance work items
             autoAdvanceWorkItem?.cancel()
             autoAdvanceWorkItem = nil
             
@@ -108,16 +111,27 @@ final class GameViewModel: ObservableObject {
             ProgressTracker.shared.recordWrongQuestion(problemId: problem.id, problem: problem)
             print("📝 Tracked wrong question: \(problem.id)")
             print("⚠️ Wrong answer selected - showing explanation")
-            print("📝 Explanation text: \(explanationText)")
+            print("📝 Explanation from JSON: \(problem.explanation)")
+            print("📝 Full explanation text: \(explanationText)")
             
             // Show feedback FIRST - DO NOT auto-advance for wrong answers
+            // Set showFeedback to true to display explanation
             showFeedback = true
             
             // Record progress
             ProgressTracker.shared.recordAttempt(difficulty: difficulty, isCorrect: isCorrectAnswer)
             
-            print("📊 Feedback shown for wrong answer. showFeedback=\(showFeedback), isCorrectAnswer=\(isCorrectAnswer)")
-            print("📊 User MUST click Next button to proceed - NO auto-advance")
+            // CRITICAL: Ensure isCorrectAnswer is false so auto-advance won't trigger
+            // Double-check that isCorrectAnswer is false (should already be false, but verify)
+            if isCorrectAnswer {
+                print("❌ ERROR: isCorrectAnswer is true for wrong answer! This should never happen!")
+                isCorrectAnswer = false  // Force it to false
+            }
+            
+            print("📊 Feedback shown for wrong answer.")
+            print("📊 State: showFeedback=\(showFeedback), isCorrectAnswer=\(isCorrectAnswer), totalAttempts=\(totalAttempts)")
+            print("📊 User MUST click Next button to proceed - NO auto-advance will occur")
+            print("📊 Auto-advance work item cancelled: \(autoAdvanceWorkItem == nil)")
         }
     }
 
@@ -127,13 +141,17 @@ final class GameViewModel: ObservableObject {
             return 
         }
         
-        // IMPORTANT: For wrong answers, this should ONLY be called by user clicking Next button
-        // If isCorrectAnswer is false, this means it's a wrong answer and should NOT auto-advance
+        // CRITICAL CHECK: For wrong answers, this should ONLY be called by user clicking Next button
+        // Log the call to track if it's being called automatically
+        let callStack = Thread.callStackSymbols.prefix(5).joined(separator: "\n")
         if !isCorrectAnswer {
             print("✅ User clicked Next button for wrong answer - proceeding to next question")
+            print("📞 Call stack: \(callStack)")
+        } else {
+            print("➡️ Auto-advancing for correct answer")
         }
         
-        // Cancel any pending auto-advance
+        // Cancel any pending auto-advance (should already be cancelled for wrong answers)
         autoAdvanceWorkItem?.cancel()
         autoAdvanceWorkItem = nil
         
