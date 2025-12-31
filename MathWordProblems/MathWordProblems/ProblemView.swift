@@ -1,5 +1,5 @@
 import SwiftUI
-
+import Combine
 struct ProblemView<ViewModel: GameViewModelProtocol>: View {
     @ObservedObject var viewModel: ViewModel
     @Environment(\.dismiss) var dismiss
@@ -43,11 +43,28 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                             Button {
                                 viewModel.selectAnswer(at: index)
                             } label: {
-                                Text("\(problem.answers[index])")
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.blue.opacity(0.2))
-                                    .cornerRadius(12)
+                                HStack {
+                                    Text("\(problem.answers[index])")
+                                        .frame(maxWidth: .infinity)
+                                    
+                                    if viewModel.showFeedback {
+                                        if index == problem.correct {
+                                            Image(systemName: "checkmark.circle.fill")
+                                                .foregroundColor(.green)
+                                        } else if viewModel.selectedAnswerIndex == index && !viewModel.isCorrectAnswer {
+                                            Image(systemName: "xmark.circle.fill")
+                                                .foregroundColor(.red)
+                                        }
+                                    }
+                                }
+                                .padding()
+                                .background(answerButtonColor(for: index, problem: problem))
+                                .foregroundColor(answerTextColor(for: index, problem: problem))
+                                .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(answerBorderColor(for: index, problem: problem), lineWidth: 2)
+                                )
                             }
                             .disabled(viewModel.showFeedback)
                         }
@@ -55,13 +72,44 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
                     .padding(.horizontal)
 
                     if viewModel.showFeedback {
-                        Text(viewModel.isCorrectAnswer ? "✅ Correct!" : "❌ Try again")
-                            .font(.headline)
-                            .padding(.top, 8)
-
-                        Text(viewModel.explanationText)
-                            .font(.subheadline)
-                            .padding(.horizontal)
+                        // Feedback message
+                        VStack(spacing: 12) {
+                            HStack {
+                                if viewModel.isCorrectAnswer {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.green)
+                                        .font(.title2)
+                                    Text("Correct!")
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.green)
+                                } else {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.red)
+                                        .font(.title2)
+                                    Text("Incorrect")
+                                        .font(.title2)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.red)
+                                }
+                            }
+                            
+                            // Always show explanation
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Explanation:")
+                                    .font(.headline)
+                                    .foregroundColor(.secondary)
+                                
+                                Text(viewModel.explanationText)
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                            .padding()
+                            .background(Color.gray.opacity(0.1))
+                            .cornerRadius(12)
+                        }
+                        .padding(.top, 8)
 
                     HStack(spacing: 16) {
                         if viewModel.hasPreviousProblem {
@@ -125,6 +173,58 @@ struct ProblemView<ViewModel: GameViewModelProtocol>: View {
             }
         }
     }
+    
+    // Helper methods for answer button styling
+    private func answerButtonColor(for index: Int, problem: Problem) -> Color {
+        guard viewModel.showFeedback else {
+            return Color.blue.opacity(0.2)
+        }
+        
+        let correctIndex = problem.correct
+        
+        if index == correctIndex {
+            // Correct answer - always green
+            return Color.green.opacity(0.3)
+        } else if viewModel.selectedAnswerIndex == index && !viewModel.isCorrectAnswer {
+            // User's wrong selection - red
+            return Color.red.opacity(0.3)
+        } else {
+            // Other options
+            return Color.blue.opacity(0.2)
+        }
+    }
+    
+    private func answerTextColor(for index: Int, problem: Problem) -> Color {
+        guard viewModel.showFeedback else {
+            return .primary
+        }
+        
+        let correctIndex = problem.correct
+        
+        if index == correctIndex {
+            return .green
+        } else if viewModel.selectedAnswerIndex == index && !viewModel.isCorrectAnswer {
+            return .red
+        } else {
+            return .primary
+        }
+    }
+    
+    private func answerBorderColor(for index: Int, problem: Problem) -> Color {
+        guard viewModel.showFeedback else {
+            return Color.clear
+        }
+        
+        let correctIndex = problem.correct
+        
+        if index == correctIndex {
+            return Color.green
+        } else if viewModel.selectedAnswerIndex == index && !viewModel.isCorrectAnswer {
+            return Color.red
+        } else {
+            return Color.clear
+        }
+    }
 }
 
 // Protocol for game view model to support previews
@@ -137,6 +237,7 @@ protocol GameViewModelProtocol: ObservableObject {
     var isCorrectAnswer: Bool { get set }
     var explanationText: String { get set }
     var sessionFinished: Bool { get set }
+    var selectedAnswerIndex: Int? { get set }
     var hasPreviousProblem: Bool { get }
     var hasNextProblem: Bool { get }
     func selectAnswer(at index: Int)
@@ -204,6 +305,7 @@ class PreviewGameViewModel: ObservableObject, GameViewModelProtocol {
     @Published var isCorrectAnswer: Bool = false
     @Published var explanationText: String = ""
     @Published var sessionFinished: Bool = false
+    @Published var selectedAnswerIndex: Int? = nil
     
     let sessionSize: Int = 10
     

@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 final class GameViewModel: ObservableObject {
     @Published var difficulty: Difficulty
@@ -12,6 +13,7 @@ final class GameViewModel: ObservableObject {
     @Published var isCorrectAnswer: Bool = false
     @Published var explanationText: String = ""
     @Published var sessionFinished: Bool = false
+    @Published var selectedAnswerIndex: Int? = nil
 
     let sessionSize: Int = 10  // how many problems per play session
 
@@ -38,6 +40,7 @@ final class GameViewModel: ObservableObject {
         correctCount = 0
         totalAttempts = 0
         showFeedback = false
+        selectedAnswerIndex = nil
         sessionFinished = false
         currentProblem = sessionProblems.first
     }
@@ -45,14 +48,23 @@ final class GameViewModel: ObservableObject {
     func selectAnswer(at index: Int) {
         guard let problem = currentProblem else { return }
 
+        selectedAnswerIndex = index
         totalAttempts += 1
         let correctIndex = problem.correct
         isCorrectAnswer = (index == correctIndex)
         showFeedback = true
-        explanationText = problem.explanation
-
+        
+        // Always show explanation, especially for wrong answers
         if isCorrectAnswer {
+            explanationText = "✅ Correct! \(problem.explanation)"
             correctCount += 1
+        } else {
+            // Show correct answer and explanation when wrong
+            let correctAnswer = problem.answers[correctIndex]
+            explanationText = "❌ Incorrect. The correct answer is \(correctAnswer).\n\n\(problem.explanation)"
+            
+            // Track wrong question
+            ProgressTracker.shared.recordWrongQuestion(problemId: problem.id)
         }
         
         // Record progress
@@ -62,6 +74,8 @@ final class GameViewModel: ObservableObject {
     func goToNextProblem() {
         guard !sessionProblems.isEmpty else { return }
 
+        selectedAnswerIndex = nil  // Reset selection
+        
         if currentIndex + 1 < sessionProblems.count {
             currentIndex += 1
             currentProblem = sessionProblems[currentIndex]
@@ -74,6 +88,8 @@ final class GameViewModel: ObservableObject {
     
     func goToPreviousProblem() {
         guard !sessionProblems.isEmpty else { return }
+        
+        selectedAnswerIndex = nil  // Reset selection
         
         if currentIndex > 0 {
             currentIndex -= 1
@@ -90,4 +106,3 @@ final class GameViewModel: ObservableObject {
         return currentIndex + 1 < sessionProblems.count
     }
 }
-

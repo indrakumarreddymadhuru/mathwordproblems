@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 // Progress data model
 struct ProgressData: Codable {
@@ -15,6 +16,9 @@ struct ProgressData: Codable {
     var mediumTotal: Int = 0
     var hardCorrect: Int = 0
     var hardTotal: Int = 0
+    
+    // Track wrong questions by problem ID
+    var wrongQuestionIds: [UUID] = []
     
     var accuracy: Double {
         guard totalAttemptsToday > 0 else { return 0.0 }
@@ -166,11 +170,29 @@ class ProgressTracker: ObservableObject {
         }
     }
     
+    // Record wrong question
+    func recordWrongQuestion(problemId: UUID) {
+        if !progress.wrongQuestionIds.contains(problemId) {
+            progress.wrongQuestionIds.append(problemId)
+            save()
+        }
+    }
+    
+    // Get wrong questions count
+    var wrongQuestionsCount: Int {
+        return progress.wrongQuestionIds.count
+    }
+    
+    // Clear wrong questions (optional)
+    func clearWrongQuestions() {
+        progress.wrongQuestionIds.removeAll()
+        save()
+    }
+    
     // Reset all progress (for testing/debugging)
     func resetProgress() {
         progress = ProgressData()
         save()
     }
 }
-
 
